@@ -32,23 +32,21 @@ const navItems: { id: Section; label: string; icon: React.ElementType }[] = [
   { id: "settings", label: "Settings", icon: Settings },
 ];
 
-export function Sidebar({
+export function SidebarContent({
   activeSection,
   onSectionChange,
-  collapsed,
-  onCollapsedChange,
-}: SidebarProps) {
+  collapsed = false,
+}: {
+  activeSection: Section;
+  onSectionChange: (section: Section) => void;
+  collapsed?: boolean;
+}) {
   return (
-    <aside
-      className={cn(
-        "fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 ease-out flex flex-col",
-        collapsed ? "w-[72px]" : "w-[260px]"
-      )}
-    >
+    <>
       {/* Logo */}
       <div className="h-16 flex items-center px-4 border-b border-sidebar-border">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 bg-white">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 bg-white shadow-sm">
             <CircleDollarSign className="w-5 h-5 text-accent-foreground" />
           </div>
           <span
@@ -63,7 +61,7 @@ export function Sidebar({
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-hidden">
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeSection === item.id;
@@ -104,6 +102,28 @@ export function Sidebar({
           );
         })}
       </nav>
+    </>
+  );
+}
+
+export function Sidebar({
+  activeSection,
+  onSectionChange,
+  collapsed,
+  onCollapsedChange,
+}: SidebarProps) {
+  return (
+    <aside
+      className={cn(
+        "fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 ease-out flex flex-col",
+        collapsed ? "w-[72px]" : "w-[260px]"
+      )}
+    >
+      <SidebarContent
+        activeSection={activeSection}
+        onSectionChange={onSectionChange}
+        collapsed={collapsed}
+      />
 
       {/* Collapse button */}
       <div className="p-3 border-t border-sidebar-border">

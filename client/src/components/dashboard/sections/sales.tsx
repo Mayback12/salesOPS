@@ -59,24 +59,24 @@ export function SalesSection() {
             <table className="w-full text-sm text-left">
               <thead className="text-xs text-muted-foreground uppercase bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-4 font-medium">Sale Number</th>
-                  <th className="px-6 py-4 font-medium">Customer</th>
-                  <th className="px-6 py-4 font-medium">Date</th>
-                  <th className="px-6 py-4 font-medium">Total</th>
-                  <th className="px-6 py-4 font-medium">Status</th>
-                  <th className="px-6 py-4 font-medium text-right">Actions</th>
+                  <th className="px-4 md:px-6 py-4 font-medium">Sale</th>
+                  <th className="hidden sm:table-cell px-6 py-4 font-medium">Customer</th>
+                  <th className="hidden md:table-cell px-6 py-4 font-medium">Date</th>
+                  <th className="px-4 md:px-6 py-4 font-medium">Total</th>
+                  <th className="hidden xs:table-cell px-6 py-4 font-medium">Status</th>
+                  <th className="px-4 md:px-6 py-4 font-medium text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
+                    <td colSpan={6} className="px-4 md:px-6 py-12 text-center text-muted-foreground">
                       Loading sales...
                     </td>
                   </tr>
                 ) : filteredSales.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
+                    <td colSpan={6} className="px-4 md:px-6 py-12 text-center text-muted-foreground">
                       No sales found.
                     </td>
                   </tr>
@@ -85,26 +85,31 @@ export function SalesSection() {
                     const balanceOwed = Number(sale.balanceOwed || 0);
                     return (
                       <tr key={sale.id} className="hover:bg-muted/30 transition-colors">
-                        <td className="px-6 py-4 font-medium text-foreground">{sale.saleNumber}</td>
-                        <td className="px-6 py-4">{sale.customer?.name || 'Walk-in'}</td>
-                        <td className="px-6 py-4">{format(new Date(sale.saleDate), 'MMM dd, yyyy')}</td>
-                        <td className="px-6 py-4">
+                        <td className="px-4 md:px-6 py-4">
+                          <div className="font-medium text-foreground">{sale.saleNumber}</div>
+                          <div className="sm:hidden text-xs text-muted-foreground truncate max-w-[100px]">{sale.customer?.name || 'Walk-in'}</div>
+                          <div className="md:hidden text-xs text-muted-foreground">{format(new Date(sale.saleDate), 'MMM dd')}</div>
+                        </td>
+                        <td className="hidden sm:table-cell px-6 py-4">{sale.customer?.name || 'Walk-in'}</td>
+                        <td className="hidden md:table-cell px-6 py-4">{format(new Date(sale.saleDate), 'MMM dd, yyyy')}</td>
+                        <td className="px-4 md:px-6 py-4">
                           <div className="font-medium text-foreground">₵{sale.totalAmount}</div>
-                          <div className="text-xs text-muted-foreground">Paid: ₵{sale.amountPaid}</div>
+                          <div className="hidden xs:block text-xs text-muted-foreground">Paid: ₵{sale.amountPaid}</div>
                           {balanceOwed > 0 && (
-                            <div className="text-xs text-destructive">Customer owes: ₵{balanceOwed.toLocaleString()}</div>
+                            <div className="text-[10px] md:text-xs text-destructive font-medium">Owes: ₵{balanceOwed.toLocaleString()}</div>
                           )}
                         </td>
-                        <td className="px-6 py-4">
-                          <Badge variant={sale.status === 'COMPLETED' ? 'default' : sale.status === 'PARTIAL' ? 'secondary' : 'destructive'}>
+                        <td className="hidden xs:table-cell px-6 py-4">
+                          <Badge variant={sale.status === 'COMPLETED' ? 'default' : sale.status === 'PARTIAL' ? 'secondary' : 'destructive'} className="text-[10px] px-1.5 h-5">
                             {sale.status}
                           </Badge>
                         </td>
-                        <td className="px-6 py-4 text-right">
+                        <td className="px-4 md:px-6 py-4 text-right">
                           {balanceOwed > 0 && sale.debt ? (
                             <Button
                               variant="outline"
                               size="sm"
+                              className="h-8 text-xs px-2"
                               onClick={() => {
                                 setSelectedDebt({
                                   ...sale.debt,
@@ -114,12 +119,13 @@ export function SalesSection() {
                                 setCollectionOpen(true);
                               }}
                             >
-                              Collect Balance
+                              Collect
                             </Button>
                           ) : (
                             <Button
                               variant="ghost"
                               size="sm"
+                              className="h-8 w-8 p-0"
                               onClick={() => {
                                 setSelectedSale(sale);
                                 setSaleViewOpen(true);

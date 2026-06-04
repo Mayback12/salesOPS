@@ -45,6 +45,7 @@ function DashboardLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const isAuthReady = useAuthStore((state) => state.isAuthReady);
   const activeSection = sectionFromPath(location.pathname);
@@ -63,6 +64,7 @@ function DashboardLayout() {
 
   const handleSectionChange = (section: Section) => {
     navigate(sectionPaths[section]);
+    setIsMobileMenuOpen(false); // Close mobile menu on navigation
   };
 
   const sectionView = (section: Section, element: React.ReactNode) => (
@@ -76,19 +78,29 @@ function DashboardLayout() {
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
-      <Sidebar
-        activeSection={activeSection}
-        onSectionChange={handleSectionChange}
-        collapsed={sidebarCollapsed}
-        onCollapsedChange={setSidebarCollapsed}
-      />
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block">
+        <Sidebar
+          activeSection={activeSection}
+          onSectionChange={handleSectionChange}
+          collapsed={sidebarCollapsed}
+          onCollapsedChange={setSidebarCollapsed}
+        />
+      </div>
+
       <div
-        className={`flex-1 flex flex-col transition-all duration-300 ease-out ${
-          sidebarCollapsed ? "ml-[72px]" : "ml-[260px]"
+        className={`flex-1 flex flex-col transition-all duration-300 ease-out min-w-0 ${
+          sidebarCollapsed ? "lg:ml-[72px]" : "lg:ml-[260px]"
         }`}
       >
-        <Header activeSection={activeSection} />
-        <main className="flex-1 p-6 overflow-auto">
+        <Header 
+          activeSection={activeSection} 
+          onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
+          isMobileMenuOpen={isMobileMenuOpen}
+          onCloseMobileMenu={() => setIsMobileMenuOpen(false)}
+          onSectionChange={handleSectionChange}
+        />
+        <main className="flex-1 p-4 md:p-6 overflow-auto">
           <Routes>
             <Route path="/" element={<Navigate to="/overview" replace />} />
             <Route path="/overview" element={sectionView("overview", <OverviewSection />)} />

@@ -91,46 +91,47 @@ export function InventorySection() {
             <table className="w-full text-sm text-left">
               <thead className="text-xs text-muted-foreground uppercase bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-4 font-medium">Product</th>
-                  <th className="px-6 py-4 font-medium">Category</th>
-                  <th className="px-6 py-4 font-medium">Price</th>
-                  <th className="px-6 py-4 font-medium">Stock</th>
-                  <th className="px-6 py-4 font-medium text-right">Actions</th>
+                  <th className="px-4 md:px-6 py-4 font-medium">Product</th>
+                  <th className="hidden sm:table-cell px-6 py-4 font-medium">Category</th>
+                  <th className="px-4 md:px-6 py-4 font-medium">Price</th>
+                  <th className="px-4 md:px-6 py-4 font-medium">Stock</th>
+                  <th className="px-4 md:px-6 py-4 font-medium text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
+                    <td colSpan={5} className="px-4 md:px-6 py-12 text-center text-muted-foreground">
                       Loading inventory...
                     </td>
                   </tr>
                 ) : filteredProducts.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
+                    <td colSpan={5} className="px-4 md:px-6 py-12 text-center text-muted-foreground">
                       No products found.
                     </td>
                   </tr>
                 ) : (
                   filteredProducts.map((product: any) => (
                     <tr key={product.id} className="hover:bg-muted/30 transition-colors">
-                      <td className="px-6 py-4">
+                      <td className="px-4 md:px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded bg-accent/10 flex items-center justify-center text-accent">
+                          <div className="hidden xs:flex w-10 h-10 rounded bg-accent/10 items-center justify-center text-accent shrink-0">
                             <Package className="w-5 h-5" />
                           </div>
-                          <div>
-                            <div className="font-medium text-foreground">{product.name}</div>
-                            <div className="text-xs text-muted-foreground">{product.sku || 'No SKU'}</div>
+                          <div className="min-w-0">
+                            <div className="font-medium text-foreground truncate">{product.name}</div>
+                            <div className="text-xs text-muted-foreground truncate">{product.sku || 'No SKU'}</div>
+                            <div className="sm:hidden text-xs text-muted-foreground capitalize mt-0.5">{product.category.toLowerCase()}</div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 capitalize">{product.category.toLowerCase()}</td>
-                      <td className="px-6 py-4">
+                      <td className="hidden sm:table-cell px-6 py-4 capitalize">{product.category.toLowerCase()}</td>
+                      <td className="px-4 md:px-6 py-4">
                         <div className="font-medium text-foreground">₵{product.sellingPrice}</div>
-                        <div className="text-xs text-muted-foreground">Cost: ₵{product.costPrice}</div>
+                        <div className="hidden xs:block text-xs text-muted-foreground">Cost: ₵{product.costPrice}</div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 md:px-6 py-4">
                         <div className="flex items-center gap-2">
                           <span className={product.stockQty <= product.lowStockAlert ? 'text-destructive font-bold' : 'text-foreground'}>
                             {product.stockQty}
@@ -140,7 +141,7 @@ export function InventorySection() {
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-4 md:px-6 py-4 text-right">
                         <Button
                           variant="ghost"
                           size="sm"

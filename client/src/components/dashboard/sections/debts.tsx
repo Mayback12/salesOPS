@@ -46,47 +46,51 @@ export function DebtsSection() {
             <table className="w-full text-sm text-left">
               <thead className="text-xs text-muted-foreground uppercase bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-4 font-medium">Customer</th>
-                  <th className="px-6 py-4 font-medium">Sale</th>
-                  <th className="px-6 py-4 font-medium">Customer Owes</th>
-                  <th className="px-6 py-4 font-medium">Status</th>
-                  <th className="px-6 py-4 font-medium text-right">Actions</th>
+                  <th className="px-4 md:px-6 py-4 font-medium">Customer</th>
+                  <th className="hidden sm:table-cell px-6 py-4 font-medium">Sale</th>
+                  <th className="px-4 md:px-6 py-4 font-medium">Owes</th>
+                  <th className="hidden xs:table-cell px-6 py-4 font-medium">Status</th>
+                  <th className="px-4 md:px-6 py-4 font-medium text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
+                    <td colSpan={5} className="px-4 md:px-6 py-12 text-center text-muted-foreground">
                       Loading customer balances...
                     </td>
                   </tr>
                 ) : filteredDebts.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
+                    <td colSpan={5} className="px-4 md:px-6 py-12 text-center text-muted-foreground">
                       No outstanding customer balances found.
                     </td>
                   </tr>
                 ) : (
                   filteredDebts.map((debt: any) => (
                     <tr key={debt.id} className="hover:bg-muted/30 transition-colors">
-                      <td className="px-6 py-4 font-medium text-foreground">{debt.customer.name}</td>
-                      <td className="px-6 py-4">{debt.sale?.saleNumber || 'Manual Balance'}</td>
-                      <td className="px-6 py-4 font-medium text-foreground">₵{debt.balance.toLocaleString()}</td>
-                      <td className="px-6 py-4">
-                        <Badge variant={debt.status === 'OUTSTANDING' ? 'destructive' : 'secondary'}>
+                      <td className="px-4 md:px-6 py-4">
+                        <div className="font-medium text-foreground">{debt.customer.name}</div>
+                        <div className="sm:hidden text-xs text-muted-foreground mt-0.5">{debt.sale?.saleNumber || 'Manual Balance'}</div>
+                      </td>
+                      <td className="hidden sm:table-cell px-6 py-4">{debt.sale?.saleNumber || 'Manual Balance'}</td>
+                      <td className="px-4 md:px-6 py-4 font-medium text-foreground">₵{debt.balance.toLocaleString()}</td>
+                      <td className="hidden xs:table-cell px-6 py-4">
+                        <Badge variant={debt.status === 'OUTSTANDING' ? 'destructive' : 'secondary'} className="text-[10px] px-1.5 h-5">
                           {debt.status}
                         </Badge>
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-4 md:px-6 py-4 text-right">
                         <Button
                           variant="outline"
                           size="sm"
+                          className="h-8 text-xs px-2 md:px-3"
                           onClick={() => {
                             setSelectedDebt(debt);
                             setPaymentFormOpen(true);
                           }}
                         >
-                          Record Collection
+                          Collect
                         </Button>
                       </td>
                     </tr>

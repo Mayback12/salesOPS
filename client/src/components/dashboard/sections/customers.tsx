@@ -54,35 +54,39 @@ export function CustomersSection() {
             <table className="w-full text-sm text-left">
               <thead className="text-xs text-muted-foreground uppercase bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-4 font-medium">Name</th>
-                  <th className="px-6 py-4 font-medium">Phone</th>
-                  <th className="px-6 py-4 font-medium">Total Spent</th>
-                  <th className="px-6 py-4 font-medium text-right">Actions</th>
+                  <th className="px-4 md:px-6 py-4 font-medium">Name</th>
+                  <th className="px-4 md:px-6 py-4 font-medium">Phone</th>
+                  <th className="hidden xs:table-cell px-6 py-4 font-medium">Total Spent</th>
+                  <th className="px-4 md:px-6 py-4 font-medium text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={4} className="px-6 py-12 text-center text-muted-foreground">
+                    <td colSpan={4} className="px-4 md:px-6 py-12 text-center text-muted-foreground">
                       Loading customers...
                     </td>
                   </tr>
                 ) : filteredCustomers.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-6 py-12 text-center text-muted-foreground">
+                    <td colSpan={4} className="px-4 md:px-6 py-12 text-center text-muted-foreground">
                       No customers found.
                     </td>
                   </tr>
                 ) : (
                   filteredCustomers.map((customer: any) => (
                     <tr key={customer.id} className="hover:bg-muted/30 transition-colors">
-                      <td className="px-6 py-4 font-medium text-foreground">{customer.name}</td>
-                      <td className="px-6 py-4">{customer.phone || 'N/A'}</td>
-                      <td className="px-6 py-4 font-medium text-foreground">₵{customer.totalSpent.toLocaleString()}</td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-4 md:px-6 py-4">
+                        <div className="font-medium text-foreground">{customer.name}</div>
+                        <div className="xs:hidden text-xs text-muted-foreground mt-0.5">Spent: ₵{customer.totalSpent.toLocaleString()}</div>
+                      </td>
+                      <td className="px-4 md:px-6 py-4 text-xs md:text-sm">{customer.phone || 'N/A'}</td>
+                      <td className="hidden xs:table-cell px-6 py-4 font-medium text-foreground">₵{customer.totalSpent.toLocaleString()}</td>
+                      <td className="px-4 md:px-6 py-4 text-right">
                         <Button
                           variant="ghost"
                           size="sm"
+                          className="h-8 px-2 text-xs md:text-sm md:px-3"
                           onClick={() => {
                             setSelectedCustomer(customer);
                             setCustomerDialogOpen(true);

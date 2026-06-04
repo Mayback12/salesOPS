@@ -55,37 +55,42 @@ export function ExpensesSection() {
             <table className="w-full text-sm text-left">
               <thead className="text-xs text-muted-foreground uppercase bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-4 font-medium">Expense</th>
-                  <th className="px-6 py-4 font-medium">Category</th>
-                  <th className="px-6 py-4 font-medium">Date</th>
-                  <th className="px-6 py-4 font-medium">Amount</th>
-                  <th className="px-6 py-4 font-medium text-right">Actions</th>
+                  <th className="px-4 md:px-6 py-4 font-medium">Expense</th>
+                  <th className="hidden sm:table-cell px-6 py-4 font-medium">Category</th>
+                  <th className="hidden md:table-cell px-6 py-4 font-medium">Date</th>
+                  <th className="px-4 md:px-6 py-4 font-medium">Amount</th>
+                  <th className="px-4 md:px-6 py-4 font-medium text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
+                    <td colSpan={5} className="px-4 md:px-6 py-12 text-center text-muted-foreground">
                       Loading expenses...
                     </td>
                   </tr>
                 ) : filteredExpenses.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
+                    <td colSpan={5} className="px-4 md:px-6 py-12 text-center text-muted-foreground">
                       No expenses found.
                     </td>
                   </tr>
                 ) : (
                   filteredExpenses.map((expense: any) => (
                     <tr key={expense.id} className="hover:bg-muted/30 transition-colors">
-                      <td className="px-6 py-4 font-medium text-foreground">{expense.title}</td>
-                      <td className="px-6 py-4 capitalize">{expense.category.toLowerCase()}</td>
-                      <td className="px-6 py-4">{format(new Date(expense.expenseDate), 'MMM dd, yyyy')}</td>
-                      <td className="px-6 py-4 font-medium text-destructive">₵{expense.amount.toLocaleString()}</td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-4 md:px-6 py-4">
+                        <div className="font-medium text-foreground truncate max-w-[120px] md:max-w-none">{expense.title}</div>
+                        <div className="sm:hidden text-xs text-muted-foreground capitalize mt-0.5">{expense.category.toLowerCase()}</div>
+                        <div className="md:hidden text-xs text-muted-foreground mt-0.5">{format(new Date(expense.expenseDate), 'MMM dd')}</div>
+                      </td>
+                      <td className="hidden sm:table-cell px-6 py-4 capitalize">{expense.category.toLowerCase()}</td>
+                      <td className="hidden md:table-cell px-6 py-4">{format(new Date(expense.expenseDate), 'MMM dd, yyyy')}</td>
+                      <td className="px-4 md:px-6 py-4 font-medium text-destructive">₵{expense.amount.toLocaleString()}</td>
+                      <td className="px-4 md:px-6 py-4 text-right">
                         <Button
                           variant="ghost"
                           size="sm"
+                          className="h-8 px-2 md:px-3 text-xs md:text-sm"
                           onClick={() => {
                             setSelectedExpense(expense);
                             setExpenseEditOpen(true);

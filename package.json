@@ -14,8 +14,8 @@
     "client:dev": "npm run dev -w client",
     "server:dev": "npm run dev -w server",
     "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\"",
-    "start": "npm run prisma:generate -w server && npm run prisma:migrate -w server && npm run dev",
     "build": "npm run build -w client && npm run build -w server",
+    "start": "npm run prisma:generate -w server && npm run build && prisma migrate deploy --schema server/prisma/schema.prisma && npm run start -w server",
     "install:all": "npm install"
   },
   "devDependencies": {

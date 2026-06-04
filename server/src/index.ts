@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
 import { errorHandler } from './middleware/errorHandler';
 
 import authRoutes from './routes/auth.routes';
@@ -19,12 +20,12 @@ const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: process.env.CLIENT_URL || true,
   credentials: true
 }));
 app.use(express.json());
 
-// Routes
+// API Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/sales', salesRoutes);
@@ -36,6 +37,16 @@ app.use('/api/v1/categories', categoryRoutes);
 
 app.get('/api/v1/health', (req, res) => {
   res.status(200).json({ status: 'success', message: 'Server is healthy' });
+});
+
+// Serve static files from the React app
+const clientDistPath = path.join(__dirname, '../../client/dist');
+app.use(express.static(clientDistPath));
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(clientDistPath, 'index.html'));
 });
 
 // Error Handling
